@@ -12,6 +12,7 @@ const path = require('path')
 const {exec} = require('child_process')
 const sendEmail = require("./email/email")
 const bcrypt = require("bcrypt")
+const cloudinary = require('cloudinary').v2
 
 
 const PORT = process.env.PORT
@@ -199,17 +200,22 @@ app.post("/:username/getscore", upload.fields([{ name: "aadhaar" }, { name: "loa
     let {income, qualification, dependents, assets, debt, city} = req.body
     let files = req.files
     try {
+
+        const uploadedAadhaar = await cloudinary.uploader.upload(files.aadhaar[0].path);
+        const uploadedLoan = await cloudinary.uploader.upload(files.loan[0].path);
+        const uploadedInsurance = await cloudinary.uploader.upload(files.insurance[0].path);
+
         let mainData = await MainInfo.create({
-        username: username,
-        income: income,
-        qualification: qualification,
-        aadhaar: files.aadhaar[0].path,
-        dependents: dependents,
-        loan: files.loan[0].path,
-        insurance: files.insurance[0].path,
-        assets: assets,
-        debt: debt,
-        city: city
+            username: username,
+            income: income,
+            qualification: qualification,
+            aadhaar: uploadedAadhaar.secure_url,
+            dependents: dependents,
+            loan: uploadedLoan.secure_url,
+            insurance: uploadedInsurance.secure_url,
+            assets: assets,
+            debt: debt,
+            city: city
         })
         res.status(200).send(mainData)
     }
