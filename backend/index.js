@@ -21,7 +21,7 @@ const PORT = process.env.PORT
 app.listen(PORT, () => console.log("Server is listening."))
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: 'https://scorevision.netlify.app/',
     methods: "GET, POST, PUT, DELETE, PATCH, HEAD",
     credentials: true
 }
