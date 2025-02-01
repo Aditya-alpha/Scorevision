@@ -19,7 +19,7 @@ export default function ForgotProfilePassword() {
 
     async function sendOtp() {
         try {
-            const response = await fetch("http://localhost:8080/signin/forgotpassword", {
+            const response = await fetch("https://scorevision.onrender.com/signin/forgotpassword", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

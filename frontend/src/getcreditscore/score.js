@@ -67,7 +67,7 @@ export default function CreditScore() {
                 }
             });
             try {
-                const response = await fetch(`http://localhost:8080/${username}/getscore`, {
+                const response = await fetch(`https://scorevision.onrender.com/${username}/getscore`, {
                     method: "POST",
                     body: formData,
                 })

@@ -16,7 +16,7 @@ export default function Profile() {
     useEffect(() => {
         let fetchData = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/${username}/profile`, {
+                const response = await fetch(`https://scorevision.onrender.com/${username}/profile`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"

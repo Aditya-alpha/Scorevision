@@ -15,7 +15,7 @@ export default function History() {
     useEffect(() => {
         let fetchData = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/${username}/history`, {
+                const response = await fetch(`https://scorevision.onrender.com/${username}/history`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"

@@ -10,7 +10,7 @@ export default function ShowScore() {
     
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch(`http://localhost:8080/${username}/showscore/${id}`, {
+            const response = await fetch(`https://scorevision.onrender.com/${username}/showscore/${id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

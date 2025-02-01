@@ -24,7 +24,7 @@ export default function UpdatePassword() {
             return
         }
         try {
-            const response = await fetch(`http://localhost:8080/${username}/profile/updatepassword`, {
+            const response = await fetch(`https://scorevision.onrender.com/${username}/profile/updatepassword`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
