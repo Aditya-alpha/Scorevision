@@ -1,8 +1,13 @@
 import os
+import requests
 from pymongo import MongoClient
 from bson import ObjectId
 import pytesseract
+import cloudinary
+import cloudinary.api
+import cloudinary.uploader
 from PIL import Image
+from io import BytesIO
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
@@ -17,6 +22,12 @@ from sklearn import externals
 import joblib
 
 load_dotenv(dotenv_path='../backend/.env')
+
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),  # Your Cloudinary cloud name
+    api_key=os.getenv("CLOUDINARY_API_KEY"),        # Your Cloudinary API key
+    api_secret=os.getenv("CLOUDINARY_API_SECRET")   # Your Cloudinary API secret
+)
 
 HUGGINGFACEHUB_API_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 MONGODB_URI = os.getenv("MONGODB_URI").replace("<db_name>", "maininfodb")
@@ -35,6 +46,17 @@ if user_data:
 else:
     print("Document not found.")
 
+def download_image(url):
+    # Send a GET request to the URL to fetch the image content
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        # Open the image using PIL from the downloaded bytes
+        img = Image.open(BytesIO(response.content))
+        return img
+    else:
+        raise Exception(f"Failed to download image from {url}, status code: {response.status_code}")
+
 income = user_data["income"]
 qualification = user_data["qualification"]
 dependents = user_data["dependents"]
@@ -42,15 +64,28 @@ assets = user_data["assets"]
 city = user_data["city"]
 debt = user_data["debt"]
 
-images_path = [user_data["aadhaar"], user_data["loan"], user_data["insurance"]]
+aadhaar_url = user_data["aadhaar"]
+loan_url = user_data["loan"]
+insurance_url = user_data["insurance"]
 
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 llm = HuggingFaceHub(repo_id="google/flan-t5-base", model_kwargs={"temperature": 0, "max_length": 512})
 chain = load_qa_chain(llm, chain_type="stuff")
 
+def download_image(url):
+    # Send a GET request to the URL to fetch the image content
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        # Open the image using PIL from the downloaded bytes
+        img = Image.open(BytesIO(response.content))
+        return img
+    else:
+        raise Exception(f"Failed to download image from {url}, status code: {response.status_code}")
+
 # aadhaarImage extraction
 
-aadhaar_image = Image.open(images_path[0])
+aadhaar_image = download_image(aadhaar_url)
 aadhaar_image_text = pytesseract.image_to_string(aadhaar_image)
 aadhaar_text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
 aadhaar_docs = aadhaar_text_splitter.split_text(aadhaar_image_text)
@@ -77,7 +112,7 @@ age = calculate_age(dob)
 
 # loan statement extraction / analysis
 
-loan_image = Image.open(images_path[1])
+loan_image = download_image(loan_url)
 loan_image_text = pytesseract.image_to_string(loan_image)
 
 def count_late_payments(text):
@@ -102,7 +137,7 @@ loan_result = analyze_statement(loan_image_text)
 
 # insurance statement extraction / analysis
 
-insurance_image = Image.open(images_path[2])
+insurance_image = download_image(insurance_url)
 insurance_image_text = pytesseract.image_to_string(insurance_image)
 
 insurance_result = analyze_statement(insurance_image_text)
@@ -208,15 +243,11 @@ def new_record(df):
 
 new_record(df)
 
-print(df)
-
 base_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Move up one level if the script is inside 'logic' to avoid duplicate 'logic'
 if os.path.basename(base_dir) == "logic":
     base_dir = os.path.dirname(base_dir)
 
-# Construct the correct relative path
 model_path = os.path.join(base_dir, "logic", "creditmodel_final.joblib")
 
 # Load the model

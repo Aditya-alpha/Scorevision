@@ -11,7 +11,9 @@ const multer = require('multer')
 const path = require('path')
 const {exec} = require('child_process')
 const sendEmail = require("./email/email")
-const bcrypt = require("bcrypt")
+const bcrypt = require('bcrypt')
+const cloudinary = require("./uploadimage")
+const {CloudinaryStorage} = require('multer-storage-cloudinary')
 
 
 const PORT = process.env.PORT
@@ -19,7 +21,7 @@ const PORT = process.env.PORT
 app.listen(PORT, () => console.log("Server is listening."))
 
 const corsOptions = {
-    origin: 'https://scorevision.netlify.app',
+    origin: 'http://localhost:3000',
     methods: "GET, POST, PUT, DELETE, PATCH, HEAD",
     credentials: true
 }
@@ -27,7 +29,17 @@ const corsOptions = {
 const isProduction = process.env.NODE_ENV === 'production'
 const uploadDirectory = isProduction ? 'uploads' : path.join(__dirname, 'uploads')
 
-const storage = multer.diskStorage({
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'posts',
+        allowedFormats: ['jpg', 'jpeg', 'png'],
+    },
+});
+
+const upload = multer({ storage: storage })
+
+const localstorage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, uploadDirectory)
     },
@@ -36,7 +48,7 @@ const storage = multer.diskStorage({
     }
 })
 
-const upload = multer({ storage: storage })
+
 
 app.use(methodOverride('_method'))
 app.use(express.urlencoded({extended: true}))

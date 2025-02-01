@@ -62,7 +62,7 @@ export default function Info() {
         }
         else {
             try {
-                const response = await fetch("https://scorevision.onrender.com/", {
+                const response = await fetch("http://localhost:8080/", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -86,13 +86,20 @@ export default function Info() {
         }
     }
 
+    function handleKeyPress(event) {
+        if (event.key === "Enter") {
+            event.preventDefault()
+            handleSubmit(event)
+        }
+    }
+
     return (
-        <div className="h-[470px] mt-6 w-[462px] rounded-lg px-8 py-6 text-lg bg-white shadow-xl hover:scale-105 transition-all duration-300 2xl:w-[462px] 2xl:mr-36 max-2xl:mr-[145px] max-2xl:w-[490px] max-xl:mr-20 max-lg:mr-7 max-lg:h-[430px] max-lg:w-[420px] max-lg:px-5 max-lg:py-4 max-md:w-full max-md:h-[420px] max-sm:mb-4">
+        <div className="h-[470px] mt-6 w-[462px] rounded-lg px-8 py-6 text-lg bg-white shadow-xl hover:scale-105 transition-all duration-300 2xl:ml-[302px] 2xl:mr-36 max-2xl:mr-[145px] max-2xl:w-[490px] max-xl:mr-20 max-lg:mr-7 max-lg:h-[430px] max-lg:w-[420px] max-lg:px-5 max-lg:py-4 max-md:w-full max-md:h-[420px] max-sm:mb-4">
             <div className="flex justify-between">
                 <p className="mb-2">Gender</p>
                 <img src={img} className="h-10 w-10 -m-2 cursor-pointer hover:scale-125 transition-all" onClick={refresh} alt="refresh" />
             </div>
-            <form method="post" action="/">
+            <form method="post" action="/" onKeyDown={handleKeyPress}>
                 <input type="radio" id="Male" className="size-4 cursor-pointer hover:scale-125 transition-all" value="male" onChange={setData} name="gender" checked={formData.gender === "male"} />
                 <label htmlFor="Male" className="ml-2 font-light">Male</label>
                 <input type="radio" id="Female" className="size-4 ml-10 cursor-pointer hover:scale-125 transition-all" value="female" onChange={setData} name="gender" checked={formData.gender === "female"} />
