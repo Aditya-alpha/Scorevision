@@ -24,9 +24,9 @@ import joblib
 load_dotenv(dotenv_path='../backend/.env')
 
 cloudinary.config(
-    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),  # Your Cloudinary cloud name
-    api_key=os.getenv("CLOUDINARY_API_KEY"),        # Your Cloudinary API key
-    api_secret=os.getenv("CLOUDINARY_API_SECRET")   # Your Cloudinary API secret
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),  
+    api_key=os.getenv("CLOUDINARY_API_KEY"),        
+    api_secret=os.getenv("CLOUDINARY_API_SECRET")   
 )
 
 HUGGINGFACEHUB_API_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN")

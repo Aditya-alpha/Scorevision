@@ -10,3 +10,8 @@ pandas
 scikit-learn
 joblib
 numpy
+requests
+cloudinary
+scipy
+tqdm
+regex
