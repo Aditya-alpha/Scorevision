@@ -94,7 +94,7 @@ export default function Info() {
     }
 
     return (
-        <div className="h-[470px] mt-6 w-[462px] rounded-lg px-8 py-6 text-lg bg-white shadow-xl hover:scale-105 transition-all duration-300 2xl:ml-[302px] 2xl:mr-36 max-2xl:mr-[145px] max-2xl:w-[490px] max-xl:mr-20 max-lg:mr-7 max-lg:h-[430px] max-lg:w-[420px] max-lg:px-5 max-lg:py-4 max-md:w-full max-md:h-[420px] max-sm:mb-4">
+        <div className="h-[470px] mt-6 w-[462px] rounded-lg px-8 py-6 text-lg bg-white shadow-xl hover:scale-105 transition-all duration-300 max-2xl:mr-[145px] max-2xl:w-[490px] max-xl:mr-20 max-lg:mr-7 max-lg:h-[430px] max-lg:w-[420px] max-lg:px-5 max-lg:py-4 max-md:w-full max-md:h-[420px] max-sm:mb-4">
             <div className="flex justify-between">
                 <p className="mb-2">Gender</p>
                 <img src={img} className="h-10 w-10 -m-2 cursor-pointer hover:scale-125 transition-all" onClick={refresh} alt="refresh" />
