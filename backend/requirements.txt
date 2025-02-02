@@ -1,6 +1,5 @@
 pymongo
 pytesseract
-tesseract-ocr
 pillow
 langchain
 langchain_huggingface
